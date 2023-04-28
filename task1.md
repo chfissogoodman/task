@@ -21,13 +21,13 @@
 ### [](https://github.com/ZhuYanzhen1/Geek_Appraisal/blob/main/task1/%E6%8A%A5%E5%91%8A%E6%A8%A1%E6%9D%BF.md#%E6%80%9D%E8%80%83%E9%A2%98%E8%AF%B7%E7%BB%99%E5%87%BA%E6%80%9D%E8%80%83%E7%BB%93%E8%AE%BA)思考题（请给出思考结论）：
 
 1.  当a为1，给出x在区间[0，25]之间方程的各个瞬时值，该方程的最终定态（收敛值）是多少？
-答：0.000011
+**答：0.000999**
 2.  当a为e，给出x在区间[0，25*e]之间方程的各个瞬时值，最终定态（收敛值）是多少？（e为指数）
-答：0.000041
+**答：0.000999**
 3.  当a为π，给出x在区间[0，25*π]之间方程的各个瞬时值，最终定态（收敛值）是多少？
-答：0.000317
+**答：0.000999**
 4.  上面三小问中不同初值的方程最终都能取到各自的最终定态（收敛值），为什么？
-答：因为步长在足够小的情况下，加上函数为递减的，在规定好定义域后，最后可以取得收敛值
+**答：因为步长在足够小的情况下，加上函数为递减的，在规定好定义域后，最后可以取得收敛值。**
 
 #### [](https://github.com/ZhuYanzhen1/Geek_Appraisal/blob/main/task1/%E6%8A%A5%E5%91%8A%E6%A8%A1%E6%9D%BF.md#%E9%99%84%E5%8A%A0%E9%A2%98)附加题：
 
@@ -39,18 +39,18 @@
 ![输入图片说明](/imgs/2023-04-27/Im36SwsEwK78bwwQ.png)
  3. a=π
 ![输入图片说明](/imgs/2023-04-27/BxpCqindQTx5A91c.png)
-#### 以下为代码
- 因为我基础不太好 短期内完成的这个任务 可能会很多没考虑到的 后面会继续改进
- ```
+### 代码
+这里我用的是改进的Euler法
+```
 #include <stdio.h>  
   
+#define ABS(x) (x > 0) ? x : -x  
   
 double f(double x, double y)  
 {  
 return -y ;//这里写想要求解的函数  
 }  
-int main()  
-{  
+int main() {  
 int m;  
 int i;  
 double a, b, y0;  
@@ -62,24 +62,31 @@ printf("please write down y0:\n");//写出常数a
 scanf("%lf", &y0);  
 printf("Enter m to divide the interval into m equal parts:\n");  
 scanf("%d", &m);  
-if (m <= 0)  
-{  
+if (m <= 0) {  
 printf("Please enter a number greater than 1\n");  
 return 1;  
 }  
-h = (b-a)/m;//这里是不设0.001了方便观察，如果按照题目所说讲步长h设为0.001的话数据输出将会达到几万行  
+h = (b - a) / m;//这里是不设0.001了方便观察，如果按照题目所说讲步长h设为0.001的话数据输出将会达到几万行  
 //h=0.001;  
 xn = a;  
 yn = y0;  
-for (i = 1; i <= m; i++)//以下为改进欧拉法公式  
+for (i = 1;/* i <= m*/1; i++)//以下为改进欧拉法公式  
 {  
 xnl = xn + h;  
 ynlb = yn + h * f(xn, yn);  
 ynl = yn + h / 2 * (f(xn, yn) + f(xnl, ynlb));  
-printf("x%d=%lf,y%d=%lf\n", i, xnl, i, ynl);  
+if (ABS((ynl - yn)) < h/1000) {  
+printf("y%d=%lf， y%d=%lf",i, ynl,i,yn);  
+break;  
+}  
+if(i <= m) {  
+printf("x%d=%lf,y%d=%.10lf\n", i, xnl, i, ynl);  
+}  
 xn = xnl;  
 yn = ynl;  
+  
 }  
 return 0;  
+  
 }
 ```
